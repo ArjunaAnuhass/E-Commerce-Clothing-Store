@@ -3,6 +3,7 @@ import connectDb from './config/mongoDb.js';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import authRouter from './routes/auth/auth-routes.js'
 
 
 dotenv.config();
@@ -32,9 +33,8 @@ app.use(
 )
 
 //api Endpoints
-app.get('/', (req, res) => {
-    res.send("Api working in E-commerce clothing store...")
-})
+
+app.use('/api/auth/', authRouter)
 
 app.use(cookieParser());
 

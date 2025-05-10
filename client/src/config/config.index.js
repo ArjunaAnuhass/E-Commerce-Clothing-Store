@@ -20,4 +20,21 @@ export const registerFormControls = [
         commonType: 'input',
         type: 'password'
     }
-]
+];
+
+export const loginFormControls = [
+    {
+        name: 'email',
+        label: 'Email',
+        placeholder: 'Enter Your email',
+        commonType: 'input',
+        type: 'email'
+    },
+    {
+        name: 'password',
+        label: 'Password',
+        placeholder: 'Enter Your password',
+        commonType: 'input',
+        type: 'password'
+    }
+];

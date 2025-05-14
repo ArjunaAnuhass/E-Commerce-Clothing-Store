@@ -11,7 +11,7 @@ dotenv.config();
 //App Config
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 connectDb();
 
 //Middlewares
@@ -19,11 +19,10 @@ connectDb();
 app.use(express.json());
 app.use(
     cors({
-        origin: 'http://localhost:5173/',
+        origin: 'http://localhost:5173',
         methods: ['GET', 'POST', 'DELETE', 'PUT'],
         allowedHeaders: [
             'Content-Type',
-            'Authorization',
             'Cache-Control',
             'Expires',
             'Pragma'
@@ -31,13 +30,16 @@ app.use(
         credentials: true
     })
 )
+app.use(cookieParser());
 
 //api Endpoints
 
-app.use('/api/auth/', authRouter)
+app.use('/api/auth', authRouter)
+app.get('/testing', (req, res) => {
+    res.send('Api working successfully');
+})
 
-app.use(cookieParser());
 
 app.listen(port, () => {
-    console.log('Server started at: ', port);
+    console.log(`Server started at: ${port}`);
 })

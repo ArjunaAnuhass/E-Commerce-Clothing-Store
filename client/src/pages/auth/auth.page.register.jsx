@@ -1,7 +1,9 @@
 import CommonForm from "@/components/common/common.comp.form";
 import { registerFormControls } from "@/config/config.index";
+import { registerUserAction } from "@/store/auth-slice";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const initialState = {
@@ -14,9 +16,14 @@ const initialState = {
 function AuthRegister() {
 
     const [formData, setFormData] = useState(initialState);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    function onSubmit() {
-
+    function onSubmit(event) {
+        event.preventDefault(); //when user click the register button after filling the form this page refreshing from this function.
+        dispatch(registerUserAction(formData)).then((data) => {
+            if(data?.payload?.success) navigate("/auth/login");
+        })
     }
 
     return ( 

@@ -1,6 +1,11 @@
 import bcrypt from 'bcrypt';
 import User from '../../models/User.js';
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv';
+dotenv.config();  // <- this loads variables from .env
+
+
+const CLIENT_SECRET_KEY = process.env.SECRET_KEY
 
 
 //register
@@ -35,7 +40,7 @@ const registerUser = async(req, res) => {
 
 const loginUser = async (req, res) => {
 
-    const CLIENT_SECRET_KEY = process.env.SECRET_KEY
+    // const CLIENT_SECRET_KEY = process.env.SECRET_KEY
 
     const { email, password } = req.body;
 
@@ -82,9 +87,39 @@ const loginUser = async (req, res) => {
 
 //logout
 
+const logoutUser = async (req, res) => {
+
+    res.clearCookie("token").json({
+        success: true,
+        message: "Logged out successful"
+    });
+}
 
 
 //middleware
 
+const authMiddleware = async (req, res, next) => {
+    
+    const token = req.cookies.token;
 
-export {registerUser, loginUser}
+    if(!token) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized user!"
+        });
+    }
+
+    try {
+        const decode = jwt.verify(token, CLIENT_SECRET_KEY);
+        
+        req.user = decode;
+        next();
+    } catch (error) {
+        res.status(401).json({
+            success: false,
+            message: "Unauthorized user!"
+        });
+    }
+}
+
+export {registerUser, loginUser, logoutUser, authMiddleware}

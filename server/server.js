@@ -4,6 +4,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import authRouter from './routes/auth/auth-routes.js'
+import adminProductRoutes from './routes/admin/admin.products-routes.js';
 
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use('/api/auth', authRouter)
 app.get('/testing', (req, res) => {
     res.send('Api working successfully');
 })
+app.use('/api/admin/products', adminProductRoutes);
 
 
 app.listen(port, () => {

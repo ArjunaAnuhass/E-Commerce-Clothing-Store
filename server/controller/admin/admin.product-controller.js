@@ -21,12 +21,14 @@ const addProduct = async(req, res) => {
     try {
       const {image, title, description, category, brand, price, salePrice, totalStock} = req.body;
 
+      const imageUrl = image.secure_url;
+
       const newlyCreatedProducts = new Product({
-        image, title, description, category, brand, price, salePrice, totalStock
+        image: imageUrl, title, description, category, brand, price, salePrice, totalStock
       });
       await newlyCreatedProducts.save();
       
-      res.status(201).json({success: true, data: newlyCreatedProducts});
+      res.status(201).json({success: true, data: newlyCreatedProducts, message: "Product created Successful"});
     } catch (error) {
         console.log(error);
         res.status(500).json({success: false, message: "Error occurred"});

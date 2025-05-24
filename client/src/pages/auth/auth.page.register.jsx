@@ -1,6 +1,6 @@
 import CommonForm from "@/components/common/common.comp.form";
 import { registerFormControls } from "@/config/config.index";
-import { registerUserAction } from "@/store/auth-slice";
+import { registerUserAction } from "@/store/auth-slice/auth-slice.store.index";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";

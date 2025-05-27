@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Textarea } from "../ui/textarea";
 
 
-function CommonForm({formControls, formData, setFormData, onSubmit, buttonText}) {
+function CommonForm({formControls, formData, setFormData, onSubmit, buttonText, isButtonDisabled}) {
 
     function renderInputByComponentType(getControlItem){
         let element = null;
@@ -35,13 +35,13 @@ function CommonForm({formControls, formData, setFormData, onSubmit, buttonText})
                         [getControlItem.name] : value
                     })} value={value}>
                         <SelectTrigger className='w-full'>
-                            <SelectValue placeholder={getControlItem.placeholder}/>
+                            <SelectValue placeholder={getControlItem.label}/>
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white ">
                             {
                                 getControlItem.options && 
                                 getControlItem.options.length > 0 ?
-                                getControlItem.options.map(optionItems => <SelectItem key={optionItems.id} value={optionItems.id}>{optionItems.label}</SelectItem>) : null
+                                getControlItem.options.map((optionItems) => (<SelectItem key={optionItems.id} value={optionItems.id}>{optionItems.label}</SelectItem>)) : null
                             }
                         </SelectContent>
                     </Select>
@@ -94,7 +94,7 @@ function CommonForm({formControls, formData, setFormData, onSubmit, buttonText})
                     </div>))
                 }
             </div>
-            <Button type='submit' className='mt-2 w-full'>{buttonText || 'Submit'}</Button>
+            <Button type='submit' className='mt-2 w-full' disabled={isButtonDisabled}>{buttonText || 'Submit'}</Button>
         </form>
      );
 }

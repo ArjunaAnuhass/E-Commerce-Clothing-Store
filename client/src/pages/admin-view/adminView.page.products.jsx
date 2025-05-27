@@ -4,7 +4,7 @@ import CommonForm from "@/components/common/common.comp.form";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { addProductFormElement } from "@/config/config.index";
-import { addNewProduct, editProduct, fetchAllProducts } from "@/store/admin/product-slice/product-slice.admin.store.index";
+import { addNewProduct, deleteProduct, editProduct, fetchAllProducts } from "@/store/admin/product-slice/product-slice.admin.store.index";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -67,6 +67,15 @@ function AdminProducts() {
         return Object.keys(formData).map((key) => formData[key] !== '').every((item) => item);
     }
 
+    function handleDelete(getCurrentProductId) {
+        dispatch(deleteProduct(getCurrentProductId)).then((data) => {
+            if (data?.payload?.success) {
+                dispatch(fetchAllProducts());
+                toast.success(data.payload.message)
+            }
+        })
+    }
+
     useEffect(() => {
         dispatch(fetchAllProducts())
     }, [dispatch])
@@ -84,7 +93,8 @@ function AdminProducts() {
                         productList.map((productItem) => (<AdminProductTile setFormData={setFormData}
                                                             setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                                                             setCurrentEditedId={setCurrentEditedId}
-                                                            product={productItem}/>)) : null
+                                                            product={productItem}
+                                                            handleDelete={handleDelete}/>)) : null
                 }
             </div>
             <Sheet open={openCreateProductsDialog} onOpenChange={() => {

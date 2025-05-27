@@ -57,7 +57,7 @@ export const editProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk(
     '/products/deleteProduct',
 
-    async ({id}) => {
+    async (id) => {
         const result = await axios.delete(
             `http://localhost:3000/api/admin/products/delete/${id}`,
         );

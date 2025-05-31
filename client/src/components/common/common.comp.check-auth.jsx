@@ -6,7 +6,19 @@ function CheckAuth({isAuthenticated, user, children}) {
     const location = useLocation();
 
     if(!isAuthenticated && !(location.pathname.includes('/login') || location.pathname.includes('/register'))){
-        return <Navigate to="/auth/login"/>
+        // if (user?.role === '') {
+        //     return <Navigate to="/shop/home"/>
+        // }
+        // else if (location.pathname.includes("/shop/listing") || location.pathname.includes("/shop/checkout") || location.pathname.includes("/shop/account")){
+        //     return <Navigate to="/auth/login" />
+        // }
+        // else{
+            return <Navigate to="/auth/login"/>
+        // }
+        // else if (location.pathname.includes('/admin')) {
+        //     return <Navigate to="/unauth-page"/>
+        // }
+        
     }
 
     if(isAuthenticated && (location.pathname.includes('/login') || location.pathname.includes('/register'))){

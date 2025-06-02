@@ -7,6 +7,7 @@ import { fetchAllFilteredProducts } from "@/store/shop/product-slice/product-sli
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 
 function ShoppingListing() {
@@ -15,7 +16,20 @@ function ShoppingListing() {
     const { productList } = useSelector((state) => state.shopProducts)
     const [sort, setSort] = useState(null);
     const [filters, setFilters] = useState({});
+    const [searchParams, setSearchParams ] = useSearchParams()
 
+    function createSearchParamsHelper(filterParams) {
+        const queryParams = [];
+
+        for(const [key, value] of Object.entries(filterParams)){
+            if (Array.isArray(value) && value.length > 0) {
+                const paramValue = value.join(',')
+
+                queryParams.push(`${key}=${encodeURIComponent(paramValue)}`)
+            }
+        }
+        return queryParams.join('&')
+    }
 
     function handleSort(value) {
         setSort(value);
@@ -49,15 +63,24 @@ function ShoppingListing() {
 
     //fetch list of products
     useEffect(() => {
-        dispatch(fetchAllFilteredProducts())
-    },[dispatch]);
+        if (filters !== null && sort !== null) {
+            dispatch(fetchAllFilteredProducts({filterParams: filters, sortParams: sort}))
+        }
+    },[dispatch, sort, filters]);
 
     useEffect(() => {
         setSort("price-lowtohigh");
         setFilters(JSON.parse(sessionStorage.getItem('filters')) || {});
     }, [])
 
-    console.log(filters, "filters: ")
+    useEffect(() => {
+        if (filters && Object.keys(filters).length > 0) {
+            const createQueryString = createSearchParamsHelper(filters);
+            setSearchParams(new URLSearchParams(createQueryString))
+        }
+    }, [filters])
+
+    console.log(filters, searchParams, "filters: ")
 
     return ( 
         <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">

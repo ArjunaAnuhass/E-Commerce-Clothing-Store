@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import authRouter from './routes/auth/auth-routes.js'
 import adminProductRoutes from './routes/admin/admin.products-routes.js';
 import shopProductRoutes from './routes/shop/shop.products-routes.js';
+import cartRoutes from './routes/shop/shop.cart-routes.js';
 
 
 dotenv.config();
@@ -42,6 +43,7 @@ app.get('/testing', (req, res) => {
 })
 app.use('/api/admin/products', adminProductRoutes);
 app.use('/api/shop/products', shopProductRoutes);
+app.use('/api/shop/cart', cartRoutes);
 
 
 app.listen(port, () => {

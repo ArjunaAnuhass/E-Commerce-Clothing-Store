@@ -138,13 +138,13 @@ const updateCartItemQuantity = async(req, res) => {
 
 const deleteCartItem = async(req, res) => {
     try {
-        const { userId, productId } = req.body;
+        const { userId, productId } = req.params;
 
         if (!userId || !productId) {
             return res.status(400).json({success: false, message: "Invalid Data provided!"});
         }
 
-        const cart = await Cart.findOne({userId: userId}).populate({
+        const cart = await Cart.findOne({userId}).populate({
             path: "items.productId",
             select: "image, title, price, salePrice"
         });
@@ -153,7 +153,7 @@ const deleteCartItem = async(req, res) => {
             return res.status(404).json({success: false, message: "Cart not found!"});
         }
 
-        cart.items = cart.items.filter((item) => item.productId.toString() !== productId);
+        cart.items = cart.items.filter((item) => item.productId._id.toString() !== productId);
 
         await cart.save();
 
@@ -174,8 +174,9 @@ const deleteCartItem = async(req, res) => {
         res.status(200).json({success: true,
             data: {
                 ...cart._doc,
-                populateCartItems
-            }
+                items: populateCartItems
+            },
+            message: "Product Deleted by cart successfully"
         })
 
     } catch (error) {

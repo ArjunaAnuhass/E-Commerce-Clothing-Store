@@ -1,9 +1,27 @@
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCartItems, fetchCartItems } from "@/store/shop/cart-slice/cart-slice.shop.index";
+import { toast } from "sonner";
+import { data } from "react-router-dom";
 
 
 
 function UserCartItemsContent({cartItems}) {
+
+    const { user } = useSelector((state) => state.auth)
+
+    const dispatch = useDispatch()
+
+    function handleCartItemDelete(getItemCart) {
+        dispatch(deleteCartItems({userId: user?.id, productId: getItemCart?.productId})).then((data) => {
+            if (data?.payload?.success) {
+                // dispatch(fetchCartItems(user?.id))
+                toast.success(data.payload.message)
+            }
+        });
+    }
+
     return ( 
         <div className="flex items-center space-x-4">
             <img src={cartItems?.image} alt={cartItems?.title} className="w-20 h-20 rounded object-cover" />
@@ -25,6 +43,7 @@ function UserCartItemsContent({cartItems}) {
                 <p className="font-semibold">
                     $ {((cartItems?.salePrice > 0 ? cartItems?.salePrice : cartItems?.price) * cartItems?.quantity).toFixed(2)}
                 </p>
+                <Trash onClick={() => handleCartItemDelete(cartItems)} className="cursor-pointer mt-1" size={20}/>
             </div>
         </div>
      );

@@ -10,7 +10,7 @@ function UserCartWrapper({cartItems }) {
             <SheetHeader>
                 <SheetTitle>Your Cart</SheetTitle>
             </SheetHeader>
-            <div className="mt-8 space-y-4">
+            <div className="mt-8 space-y-4 p-3">
                 {
                     cartItems && cartItems.length > 0 ?
                         cartItems.map((item) => (<UserCartItemsContent cartItems={item}/>)) : null

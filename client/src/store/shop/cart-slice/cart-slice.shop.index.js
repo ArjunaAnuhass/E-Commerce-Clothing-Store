@@ -115,6 +115,7 @@ const ShoppingCartSlice = createSlice({
             })
             .addCase(deleteCartItems.rejected, (state) => {
                 state.isLoading = false
+                state.cartItems = []
             })
     }
 });

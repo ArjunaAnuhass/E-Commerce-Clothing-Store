@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 
 
-function ShoppingProductTile({product, handleGetProductDetails}) {
+function ShoppingProductTile({product, handleGetProductDetails, handleAddToCart}) {
     return ( 
         <Card className='w-full max-w-sm mx-auto'>
             <div onClick={() => handleGetProductDetails(product?._id)}>
@@ -30,10 +30,11 @@ function ShoppingProductTile({product, handleGetProductDetails}) {
                         }
                     </div>
                 </CardContent>
-                <CardFooter className='flex justify-between items-center'>
-                    <Button className='w-full'>Add to Cart</Button>
-                </CardFooter>
+                
             </div>
+            <CardFooter className='flex justify-between items-center'>
+                    <Button onClick={() => handleAddToCart(product?._id)} className='w-full'>Add to Cart</Button>
+            </CardFooter>
         </Card>
      );
 }

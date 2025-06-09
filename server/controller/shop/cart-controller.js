@@ -29,7 +29,7 @@ const addToCart = async(req, res) => {
             cart.items[findCurrentProductIndex].quantity += quantity;
         }
         await cart.save();
-        res.status(200).json({success: true, data: cart});
+        res.status(200).json({success: true, data: cart, message: "Product added to cart successfully"});
 
     } catch (error) {
         console.log(error, "error: ")
@@ -48,7 +48,7 @@ const fetchCartItems = async(req, res) => {
 
         const cart = await Cart.findOne({userId: userId}).populate({
             path: 'items.productId',
-            select: 'image, title, price, salePrice'
+            select: 'image title price salePrice'
         });
 
         if (!cart) {
@@ -68,7 +68,7 @@ const fetchCartItems = async(req, res) => {
             title: item.productId.title,
             price: item.productId.price,
             salePrice: item.productId.salePrice,
-            quantity: item.productId.quantity
+            quantity: item.quantity
         }));
 
         res.status(200).json({success: true,

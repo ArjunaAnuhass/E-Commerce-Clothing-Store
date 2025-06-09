@@ -88,13 +88,13 @@ const fetchCartItems = async(req, res) => {
 
 const updateCartItemQuantity = async(req, res) => {
     try {
-        const { userId, productId, quantity} = req.body;
+        const { userId, productId, quantity } = req.body;
 
         if (!userId || !productId || quantity <= 0) {
             return res.status(400).json({success: false, message: "Invalid data provided!"})
         }
 
-        const cart = await Cart.findOne({userId: userId});
+        const cart = await Cart.findOne({userId});
         if (!cart) {
             return res.status(404).json({success: false, message: "Cart not found!"});
         }
@@ -126,7 +126,8 @@ const updateCartItemQuantity = async(req, res) => {
             data: {
                 ...cart._doc,
                 items: populateCartItems
-            }
+            },
+            message: "Cart Item quantity update successfully"
         })
 
     } catch (error) {

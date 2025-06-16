@@ -10,6 +10,7 @@ import {
   fetchCartItems,
 } from "@/store/shop/cart-slice/cart-slice.shop.index";
 import { toast } from "sonner";
+import { setProductDetails } from "@/store/shop/product-slice/product-slice.shop.index";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   const { user } = useSelector((state) => state.auth);
@@ -27,8 +28,13 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
     });
   }
 
+  function handleDialogClose() {
+    setOpen(false);
+    dispatch(setProductDetails());
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw]">
         <div className="relative overflow-hidden rounded-lg">
           <img

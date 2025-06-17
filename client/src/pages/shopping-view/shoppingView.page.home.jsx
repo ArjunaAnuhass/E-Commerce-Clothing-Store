@@ -14,7 +14,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProducts } from "@/store/shop/product-slice/product-slice.shop.index";
+import { fetchAllFilteredProducts, fetchProductDetails } from "@/store/shop/product-slice/product-slice.shop.index";
 import ShoppingProductTile from "@/components/shopping-view/shoppingView.comp.product-tile";
 import {
   SiAdidas,
@@ -26,6 +26,9 @@ import {
 } from "react-icons/si";
 import { FaApple } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice/cart-slice.shop.index";
+import { toast } from "sonner";
+import ProductDetailsDialog from "@/components/shopping-view/shoppingView.comp.product-details";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -45,9 +48,11 @@ const brandsWithIcon = [
 ];
 
 function ShoppingHome() {
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector((state) => state.shopProducts);
+  const { user } = useSelector((state) => state.auth)
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const slides = [banner01, banner02, banner03];
 
@@ -61,6 +66,26 @@ function ShoppingHome() {
     };
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate(`/shop/listing`);
+  }
+
+  function handleGetProductDetails(getCurrentProductId) {
+      dispatch(fetchProductDetails(getCurrentProductId));
+    }
+
+    function handleAddToCart(getCurrentProductId) {
+    console.log(getCurrentProductId);
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast.success(data.payload.message)
+      }
+    });
   }
 
 
@@ -81,7 +106,13 @@ function ShoppingHome() {
     );
   }, [dispatch]);
 
-  console.log(productList, "ProductList:: ");
+  useEffect(() => {
+    if (productDetails !== null) {
+        setOpenDetailsDialog(true);
+    }
+  },[productDetails])
+
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -166,12 +197,17 @@ function ShoppingHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {productList && productList.length > 0
               ? productList.map((productItem) => (
-                  <ShoppingProductTile product={productItem} />
+                  <ShoppingProductTile product={productItem} handleGetProductDetails={handleGetProductDetails} handleAddToCart={handleAddToCart} />
                 ))
               : null}
           </div>
         </div>
       </section>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 }

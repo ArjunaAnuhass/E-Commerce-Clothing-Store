@@ -3,8 +3,9 @@ import CommonForm from "../common/common.comp.form";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { addressFormControls } from "@/config/config.index";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewAddress, fetchAllAddresses } from "@/store/shop/address-slice/address-slice.shop.index";
+import { addNewAddress, deleteAddress, fetchAllAddresses } from "@/store/shop/address-slice/address-slice.shop.index";
 import AddressCard from "./shoppingView.comp.address-card";
+import { toast } from "sonner";
 
 const initialAddressFormData = {
   address: "",
@@ -38,6 +39,15 @@ function Address() {
     })
   }
 
+  function handleDeleteAddress(getCurrentAddress){
+    dispatch(deleteAddress({userId: user?.id, addressId: getCurrentAddress?._id})).then(data => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllAddresses(user?.id));
+        toast.success(data.payload.message);
+      }
+    })
+  }
+
   function isFormValid() {
     return Object.keys(formData)
       .map((key) => formData[key].trim() !== "")
@@ -55,7 +65,7 @@ function Address() {
     <Card>
       <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
         {
-          addressList && addressList.length > 0 ? addressList.map((singleAddressItem) => <AddressCard addressInfo={singleAddressItem}/>) : "Title"
+          addressList && addressList.length > 0 ? addressList.map((singleAddressItem) => <AddressCard handleDeleteAddress={handleDeleteAddress} addressInfo={singleAddressItem}/>) : "Title"
         }
       </div>
       <CardHeader>

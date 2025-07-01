@@ -64,7 +64,7 @@ const editAddress = async (req, res) => {
             return res.status(404).json({success: false, message: "Address not found!"});
         }
 
-        res.status(200).json({success: true, data: address});
+        res.status(200).json({success: true, data: address, message: "Address Edited Successfully"});
 
     } catch (error) {
         console.log(error);

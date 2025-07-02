@@ -4,11 +4,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 
 
 
-function ShoppingOrders() {
+function AdminOrdersView() {
     return ( 
         <Card>
             <CardHeader className="mt-5">
-                <CardTitle>Order History</CardTitle>
+                <CardTitle>All Orders</CardTitle>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -40,4 +40,4 @@ function ShoppingOrders() {
      );
 }
 
-export default ShoppingOrders;
+export default AdminOrdersView;

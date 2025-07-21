@@ -6,7 +6,6 @@ import {
   updateCartQuantity,
 } from "@/store/shop/cart-slice/cart-slice.shop.index";
 import { toast } from "sonner";
-import { data } from "react-router-dom";
 
 function UserCartItemsContent({ cartItems }) {
   const { user } = useSelector((state) => state.auth);
